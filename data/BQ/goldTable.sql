@@ -33,7 +33,6 @@ LEFT JOIN `avd-databricks-demo.silver_dataset.orders` o ON c.customer_id = o.cus
 LEFT JOIN `avd-databricks-demo.silver_dataset.order_items` oi ON o.order_id = oi.order_id
 WHERE c.is_active = TRUE
 GROUP BY 1, 2, 6;
-
 -----------------------------------------------------------------------------------------------------------
 --3. Product Performance (product_performance)
 
