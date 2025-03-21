@@ -47,6 +47,7 @@ OPTIONS (
 );
 
 
+
 CREATE EXTERNAL TABLE IF NOT EXISTS `nomanproject.bronze_dataset.order_items`
 (
     order_item_id INT64,
