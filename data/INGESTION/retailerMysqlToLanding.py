@@ -1,3 +1,4 @@
+
 from google.cloud import storage, bigquery
 import pandas as pd
 from pyspark.sql import SparkSession
@@ -8,23 +9,23 @@ import json
 spark = SparkSession.builder.appName("RetailerMySQLToLanding").getOrCreate()
 
 # Google Cloud Storage (GCS) Configuration
-GCS_BUCKET = "datalake-project-bkt-19032025"
+GCS_BUCKET = "avd-datalake"
 LANDING_PATH = f"gs://{GCS_BUCKET}/landing/retailer-db/"
 ARCHIVE_PATH = f"gs://{GCS_BUCKET}/landing/retailer-db/archive/"
 CONFIG_FILE_PATH = f"gs://{GCS_BUCKET}/configs/retailer_config.csv"
 
 # BigQuery Configuration
-BQ_PROJECT = "avd-databricks-demo"
+BQ_PROJECT = "nomanproject"
 BQ_AUDIT_TABLE = f"{BQ_PROJECT}.temp_dataset.audit_log"
 BQ_LOG_TABLE = f"{BQ_PROJECT}.temp_dataset.pipeline_logs"
 BQ_TEMP_PATH = f"{GCS_BUCKET}/temp/"  
 
 # MySQL Configuration
 MYSQL_CONFIG = {
-    "url": "jdbc:mysql://34.55.68.64:3306/retailerDB?useSSL=false&allowPublicKeyRetrieval=true",
+    "url": "jdbc:mysql://35.193.45.57:3306/retailerDB?useSSL=false&allowPublicKeyRetrieval=true",
     "driver": "com.mysql.cj.jdbc.Driver",
     "user": "myuser",
-    "password": "mypass"
+    "password": "12345"
 }
 
 # Initialize GCS & BigQuery Clients
@@ -75,7 +76,7 @@ def save_logs_to_bigquery():
 # Function to Read Config File from GCS
 def read_config_file():
     df = spark.read.csv(CONFIG_FILE_PATH, header=True)
-    log_event("INFO", "Successfully read the config file")
+    log_event("INFO", "✅ Successfully read the config file")
     return df
 
 # Function to Get Latest Watermark from BigQuery Audit Table
@@ -138,7 +139,7 @@ def extract_and_save_to_landing(table, load_type, watermark_col):
                 .option("dbtable", query)
                 .load())
 
-        log_event("SUCCESS", f"Successfully extracted data from {table}", table=table)
+        log_event("SUCCESS", f"✅ Successfully extracted data from {table}", table=table)
 
         # Convert Spark DataFrame to JSON
         pandas_df = df.toPandas()
@@ -153,7 +154,7 @@ def extract_and_save_to_landing(table, load_type, watermark_col):
         blob = bucket.blob(JSON_FILE_PATH)
         blob.upload_from_string(json_data, content_type="application/json")
 
-        log_event("SUCCESS", f"JSON file successfully written to gs://{GCS_BUCKET}/{JSON_FILE_PATH}", table=table)
+        log_event("SUCCESS", f"✅ JSON file successfully written to gs://{GCS_BUCKET}/{JSON_FILE_PATH}", table=table)
 
         # Insert Audit Entry
         audit_df = spark.createDataFrame([
@@ -166,7 +167,7 @@ def extract_and_save_to_landing(table, load_type, watermark_col):
             .mode("append")
             .save())
 
-        log_event("SUCCESS", f"Audit log updated for {table}", table=table)
+        log_event("SUCCESS", f"✅ Audit log updated for {table}", table=table)
 
     except Exception as e:
         log_event("ERROR", f"Error processing {table}: {str(e)}", table=table)
