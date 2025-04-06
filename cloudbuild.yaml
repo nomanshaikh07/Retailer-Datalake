@@ -18,5 +18,5 @@ options:
 
 substitutions:
   _DAGS_DIRECTORY: "workflows/"
-  _DAGS_BUCKET: "us-central1-new-7747f23f-bucket"
+  _DAGS_BUCKET: "us-central1-demo-b1a333dc-bucket"
   _DATA_DIRECTORY: "data/"
