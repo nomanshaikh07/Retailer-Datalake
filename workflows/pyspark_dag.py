@@ -14,7 +14,6 @@ PROJECT_ID = "nomanproject"
 REGION = "us-east1"
 CLUSTER_NAME = "my-demo-cluster"
 COMPOSER_BUCKET = "us-central1-demo-b1a333dc-bucket"
-
 GCS_JOB_FILE_1 = f"gs://{COMPOSER_BUCKET}/data/INGESTION/retailerMysqlToLanding.py"
 PYSPARK_JOB_1 = {
     "reference": {"project_id": PROJECT_ID},
